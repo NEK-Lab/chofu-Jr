@@ -1,9 +1,6 @@
 import pygame
-
 from setting import controller_setting
-
 controller_const = controller_setting()
-
 class logicool_controller:
     def __init__(self):
         pygame.init()
@@ -15,19 +12,14 @@ class logicool_controller:
         events = pygame.event.get()
         if events:
             #print(events)
-
             for i in range(4):
                 self.check_axis(i)
-
             for i in range(12):
                 self.check_btn(i)
-
             self.check_hat()
-
             #print(self.status)
             formatted_status = [format(x, '>4') for x in self.status]
             print("[" + ", ".join(formatted_status) + "]")
-
             return self.status
 
     def check_axis(self,axnum):
