@@ -6,7 +6,7 @@ class logicool_controller:
         pygame.init()
         self.logicool = pygame.joystick.Joystick(0)
         self.logicool.init()
-        self.status = [None] * 18
+        self.status = [None] * 19
 
     def check_state(self):
         events = pygame.event.get()
@@ -23,7 +23,7 @@ class logicool_controller:
             return self.status
 
     def check_axis(self,axnum):
-        axis_value = int(self.logicool.get_axis(axnum)*256*((-1)**(axnum)))
+        axis_value = int(self.logicool.get_axis(axnum)*255*((-1)**(axnum)))
         if abs(axis_value) > controller_const.joystickmin:
             self.status[axnum] = axis_value
         else:
