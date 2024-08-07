@@ -6,7 +6,7 @@ class logicool_controller:
         pygame.init()
         self.logicool = pygame.joystick.Joystick(0)
         self.logicool.init()
-        self.status = [None] * 19
+        self.status = [0] * 20
 
     def check_state(self):
         events = pygame.event.get()
@@ -19,7 +19,7 @@ class logicool_controller:
             self.check_hat()
             #print(self.status)
             formatted_status = [format(x, '>4') for x in self.status]
-            print("[" + ", ".join(formatted_status) + "]")
+            #print("[" + ", ".join(formatted_status) + "]")
             return self.status
 
     def check_axis(self,axnum):
