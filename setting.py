@@ -6,6 +6,6 @@ class controller_setting:
 
 class serial_setting:
     def __init__(self):
-        self.port = ["COM3", "COM4", "COM5"]
+        self.port = ["COM6", "COM4", "COM5"]
         self.speed = 9600
         self.timeout = 0.1

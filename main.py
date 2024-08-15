@@ -12,13 +12,8 @@ class serial_communicator:
         self.data = [0]*20
 
     def open(self):
-        i = 0
-        while i != -1:
-            try:
-                self.serial_port = serial.Serial(serial_const.port[i], serial_const.speed, timeout=serial_const.timeout)
-                i = -1
-            except Exception as e:
-                i = i+1
+        self.serial_port = serial.Serial("COM3", serial_const.speed, timeout=serial_const.timeout)
+
 
     def communicate(self):
         self.data = controller.check_state()  # Call the method correctly
