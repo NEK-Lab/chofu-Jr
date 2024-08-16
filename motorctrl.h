@@ -12,14 +12,6 @@ Servo th4;
 
 class motorctrl {
   private:
-    int xymap(double speed) {
-      return int(MTPLSSTOP + (speed * MTPLSRANGE));
-    }
-
-    int zmap(double speed) {
-      return int(speed * L298NPLSWIDTH);
-    }
-
     void velscale() {
       double maxval = abs(velocity[0]);
       for (int i = 1; i < 4; i++) {
@@ -29,42 +21,41 @@ class motorctrl {
       }
       if (maxval > 0) {
           for (int i = 0; i < 4; i++) {
-              velocity[i] = velocity[i] / maxval;
+              velocity[i] = velocity[i] / maxval * CLUCRANGE;
           }
       }
     }
 
     void omuni(){
-      veccomp[0] = axval[2];
-      veccomp[1] = axval[3];
+      veccomp[0] = map(axval[2], AXMIN, AXMAX, -CLUCRANGE, CLUCRANGE);
+      veccomp[1] = map(axval[3], AXMIN, AXMAX, -CLUCRANGE, CLUCRANGE);
       veccomp[2] = zval;
-      veccomp[3] = axval[0];
-      angle_rad = atan2(veccomp[1], veccomp[0]);
+      veccomp[3] = map(axval[0], AXMIN, AXMAX, -CLUCRANGE, CLUCRANGE);
       for (int i = 0; i < 6; i++) {
         velocity[i] = (thvec[i][0]*veccomp[0] + thvec[i][1]*veccomp[1] + thvec[i][2]*veccomp[2] + thvec[i][3]*veccomp[3]);
       }
       velscale();
-      for (int i = 1; i < 4; i++) {
-        thval[i] = xymap(velocity[i]);
-      }
-      th1.writeMicroseconds(thval[0]);
-      th2.writeMicroseconds(thval[1]);
-      th3.writeMicroseconds(thval[2]);
-      th4.writeMicroseconds(thval[3]);
-      for (int i = 0; i < 2; i++) {
-        thval[i+4] = zmap(velocity[i+4]);
-        analogWrite(THRUSTERPIN[i+9], thval[i+4]);
-      }
-      if (veccomp[2] > 0){
+      th1.writeMicroseconds(map(velocity[0], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
+      th2.writeMicroseconds(map(velocity[1], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
+      th3.writeMicroseconds(map(velocity[2], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
+      th4.writeMicroseconds(map(velocity[3], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
+      if (veccomp[2] == 1){
+        analogWrite(THRUSTERPIN[9],255);
+        analogWrite(THRUSTERPIN[10],255);
         digitalWrite(THRUSTERPIN[4], HIGH);
         digitalWrite(THRUSTERPIN[5], LOW);
         digitalWrite(THRUSTERPIN[6], HIGH);
         digitalWrite(THRUSTERPIN[7], LOW);
-      }else if(veccomp[2] < 0){
+      }else if(veccomp[2] == -1){
+        analogWrite(THRUSTERPIN[9],255);
+        analogWrite(THRUSTERPIN[10],255);
         digitalWrite(THRUSTERPIN[4], LOW);
         digitalWrite(THRUSTERPIN[5], HIGH);
         digitalWrite(THRUSTERPIN[6], LOW);
         digitalWrite(THRUSTERPIN[7], HIGH);
+      }else{
+        analogWrite(THRUSTERPIN[9],0);
+        analogWrite(THRUSTERPIN[10],0);
       }
     }
     
@@ -89,8 +80,8 @@ class motorctrl {
     }
 
     void drive(){
-      for (int i = 0; i < 4; i++) { 
-        axval[i] = map(logicoolstate[i], AXMIN, AXMAX, -1, 1);
+      for (int i = 0; i < 4; i++){
+        axval[i] = logicoolstate[i];
       }
       if(logicoolstate[8] == 1){
         zval = 1;
@@ -101,6 +92,5 @@ class motorctrl {
       }
       omuni();
     }
-
 };
 #endif

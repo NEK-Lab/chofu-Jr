@@ -24,6 +24,24 @@ class servoctrl {
       h1.writeMicroseconds(SVPLSMAX);
     }
 
+    void open(){
+      currenthand -= 100;
+      if (currenthand < SVPLSMIN){
+        currenthand = SVPLSMIN;
+      }
+      h1.writeMicroseconds(currenthand);
+      delay(100);
+    }
+
+    void close(){
+      currenthand += 5;
+      if (currenthand > SVPLSMAX){
+        currenthand = SVPLSMAX;
+      }
+      h1.writeMicroseconds(currenthand);
+      delay(5);
+    }
+
   public:
     void set(){
       h1.attach(SVPIN);
@@ -37,6 +55,10 @@ class servoctrl {
         absopen();
       }else if(logicoolstate[6] == 1){
         absclose();
+      }else if(logicoolstate[9] == 1){
+        open();
+      }else if(logicoolstate[11] == 1){
+        close();
       }
     }
 
