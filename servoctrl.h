@@ -25,7 +25,7 @@ class servoctrl {
     }
 
     void open(){
-      currenthand -= 100;
+      currenthand -= 10;
       if (currenthand < SVPLSMIN){
         currenthand = SVPLSMIN;
       }
@@ -34,7 +34,7 @@ class servoctrl {
     }
 
     void close(){
-      currenthand += 5;
+      currenthand += 10;
       if (currenthand > SVPLSMAX){
         currenthand = SVPLSMAX;
       }
