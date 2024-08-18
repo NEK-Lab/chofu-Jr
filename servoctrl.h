@@ -60,6 +60,8 @@ class servoctrl {
       }else if(logicoolstate[11] == 1){
         close();
       }
+      Serial.print(",");
+      Serial.println(currenthand);
     }
 
 };

@@ -91,6 +91,17 @@ class motorctrl {
         zval = 0;
       }
       omuni();
+      Serial.print(velocity[0]);
+      Serial.print(",");
+      Serial.print(velocity[1]);
+      Serial.print(",");
+      Serial.print(velocity[2]);
+      Serial.print(",");
+      Serial.print(velocity[3]);
+      Serial.print(",");
+      Serial.print(velocity[4]*1000);
+      Serial.print(",");
+      Serial.print(velocity[5]*1000);
     }
 };
 #endif

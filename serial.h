@@ -46,10 +46,11 @@ class serial {
         startIndex = commaIndex + 1;
         index++;
       }
-      for (int i = 0; i < CONTENTS; i++) {
+      /*for (int i = 0; i < CONTENTS; i++) {
         Serial.print(logicoolstate[i]);
       }
       Serial.println();
+      */
     }
 };
 
