@@ -16,7 +16,7 @@ class logicool_controller:
                 self.check_axis(i)
             for i in range(12):
                 self.check_btn(i)
-            self.check_hat()
+            #self.check_hat()
             #print(self.status)
             formatted_status = [format(x, '>4') for x in self.status]
             #print("[" + ", ".join(formatted_status) + "]")

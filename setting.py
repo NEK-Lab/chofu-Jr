@@ -6,6 +6,10 @@ class controller_setting:
 
 class serial_setting:
     def __init__(self):
-        self.port = ["COM6", "COM4", "COM5"]
         self.speed = 9600
         self.timeout = 0.1
+
+class camera_setting:
+    def __init__(self):
+        self.camid = 0
+        self.save_dir = './img'

@@ -1,29 +1,54 @@
 import cv2
+import os
+import datetime
 
-# Webカメラをキャプチャするためのビデオキャプチャオブジェクトを作成
-# デフォルトカメラは通常デバイスID 0 にありますが、別のカメラを使用する場合は ID を変更します
-cap = cv2.VideoCapture(1)
+from setting import camera_setting
 
-if not cap.isOpened():
-    print("カメラが開けませんでした")
-    exit()
+cam_const = camera_setting()
 
-while True:
-    # フレームをキャプチャする
-    ret, frame = cap.read()
+class webcamcapture:
+    def __init__(self):
+        self.cap = cv2.VideoCapture(cam_const.camid)
+        if not self.cap.isOpened():
+            raise ValueError("failed cam open")
+        self.save_dir = cam_const.save_dir
+        if not os.path.exists(self.save_dir):
+            os.makedirs(self.save_dir)
 
-    # フレームが正常にキャプチャされたか確認
-    if not ret:
-        print("フレームを取得できませんでした")
-        break
+    def show_video(self):
+        while True:
+            ret, frame = self.cap.read()
+            if not ret:
+                print("faild get flame")
+                break
 
-    # キャプチャしたフレームを表示
-    cv2.imshow('Webcam', frame)
+            cv2.imshow('Webcam', frame)
 
-    # 'q'キーが押されたらループを終了
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('q'):
+                break
+            elif key == ord('s'):
+                self.save_img(frame)
+            elif key == ord('c'):
+                self.clear_img()
 
-# キャプチャを解放してウィンドウを閉じる
-cap.release()
-cv2.destroyAllWindows()
+        self.cap.release()
+        cv2.destroyAllWindows()
+
+    def save_img(self, frame):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        photo_filename = os.path.join(self.save_dir, f'photo_{timestamp}.jpg')
+        cv2.imwrite(photo_filename, frame)
+        print(f"save img: {photo_filename}")
+
+    def clear_img(self):
+        for filename in os.listdir(self.save_dir):
+            file_path = os.path.join(self.save_dir, filename)
+            if os.path.isfile(file_path) and filename.endswith('.jpg'):
+                os.remove(file_path)
+                print(f"delete: {file_path}")
+        print("delete all img")
+
+if __name__ == "__main__":
+    webcam = webcamcapture()
+    webcam.show_video()
