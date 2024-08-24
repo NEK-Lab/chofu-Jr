@@ -30,7 +30,7 @@ class servoctrl {
         currenthand = SVPLSMIN;
       }
       h1.writeMicroseconds(currenthand);
-      delay(100);
+      delay(5);
     }
 
     void close(){

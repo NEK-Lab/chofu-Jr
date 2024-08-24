@@ -13,6 +13,7 @@ class serial {
 
     void begin() {
       Serial.begin(COMSPEED);
+      delay(2000);
       while (!Serial) {
       }
       while (Serial.available() == 0){

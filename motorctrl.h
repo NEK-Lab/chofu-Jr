@@ -34,25 +34,29 @@ class motorctrl {
       for (int i = 0; i < 6; i++) {
         velocity[i] = (thvec[i][0]*veccomp[0] + thvec[i][1]*veccomp[1] + thvec[i][2]*veccomp[2] + thvec[i][3]*veccomp[3]);
       }
+      velocity[0] = velocity[0]*yabai1;
+      velocity[1] = velocity[0]*yabai1;
+      velocity[2] = velocity[0]*yabai2;
+      velocity[3] = velocity[0]*yabai2;
       velscale();
-      th1.writeMicroseconds(map(velocity[0], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
-      th2.writeMicroseconds(map(velocity[1], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
-      th3.writeMicroseconds(map(velocity[2], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
-      th4.writeMicroseconds(map(velocity[3], -CLUCRANGE, CLUCRANGE, MTPLSMIN, MTPLSMAX));
+      th1.writeMicroseconds(map(velocity[0], -CLUCRANGE, CLUCRANGE, MTPLSMAX, MTPLSMIN));
+      th2.writeMicroseconds(map(velocity[1], -CLUCRANGE, CLUCRANGE, MTPLSMAX, MTPLSMIN));
+      th3.writeMicroseconds(map(velocity[2], -CLUCRANGE, CLUCRANGE, MTPLSMAX, MTPLSMIN));
+      th4.writeMicroseconds(map(velocity[3], -CLUCRANGE, CLUCRANGE, MTPLSMAX, MTPLSMIN));
       if (veccomp[2] == 1){
         analogWrite(THRUSTERPIN[9],255);
         analogWrite(THRUSTERPIN[10],255);
         digitalWrite(THRUSTERPIN[4], HIGH);
         digitalWrite(THRUSTERPIN[5], LOW);
-        digitalWrite(THRUSTERPIN[6], HIGH);
-        digitalWrite(THRUSTERPIN[7], LOW);
+        digitalWrite(THRUSTERPIN[6], LOW);
+        digitalWrite(THRUSTERPIN[7], HIGH);
       }else if(veccomp[2] == -1){
         analogWrite(THRUSTERPIN[9],255);
         analogWrite(THRUSTERPIN[10],255);
         digitalWrite(THRUSTERPIN[4], LOW);
         digitalWrite(THRUSTERPIN[5], HIGH);
-        digitalWrite(THRUSTERPIN[6], LOW);
-        digitalWrite(THRUSTERPIN[7], HIGH);
+        digitalWrite(THRUSTERPIN[6], HIGH);
+        digitalWrite(THRUSTERPIN[7], LOW);
       }else{
         analogWrite(THRUSTERPIN[9],0);
         analogWrite(THRUSTERPIN[10],0);
@@ -89,6 +93,16 @@ class motorctrl {
         zval = -1;
       }else{
         zval = 0;
+      }
+      if(logicoolstate[14] == 1){
+        yabai1 = 0;
+      }
+      if(logicoolstate[15] == 1){
+        yabai2 = 0;
+      }
+      if (logicoolstate[14] == 1 && logicoolstate[15] == 1){
+        yabai1 = 1;
+        yabai2 = 1;
       }
       omuni();
       Serial.print(velocity[0]);

@@ -139,11 +139,13 @@ class Application(tk.Tk):
         return ', '.join(formatted_data)
 
     def update_frame(self):
+        # Read image from camera
         ret, frame = self.kanicam.cap.read()
         if ret:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             img = Image.fromarray(frame)
 
+            # Resize image
             new_width = self.camera_width
             new_height = self.camera_height
             img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
@@ -152,15 +154,28 @@ class Application(tk.Tk):
             self.camera_label.imgtk = imgtk
             self.camera_label.configure(image=imgtk)
 
+        # Communicate with the serial port
         self.serial_communicator.communicate()
         send_data = self.format_data(self.serial_communicator.last_data)
         self.sdata_label.config(text=f"Send data       : {send_data}")
+
+        # Check if we need to save the image
+        if self.serial_communicator.data[13] == 1:
+            self.kanicam.save_img(frame)
+
+        if self.serial_communicator.data[12] == 1:
+            self.kanicam.clear_img()
+
+        # Format and display received data
         received_data = self.serial_communicator.arduino_data.split(',')
         formatted_received_data = self.format_received_data(received_data)
         received_data_list = formatted_received_data.split(',')
         received_data_list = (received_data_list + [''] * 7)[:7]
         self.rdata_label.config(text=f"Actuator value : {', '.join(received_data_list)}")
+
+        # Schedule the next update
         self.after(10, self.update_frame)
+
 
     def on_closing(self, event=None):
         self.kanicam.cap.release()

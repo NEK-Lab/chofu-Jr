@@ -12,8 +12,7 @@ int logicoolstate[20];
 const int AXMAX = 255;
 const int AXMIN = -255;
 
-
-const int THRUSTERPIN[11] = {3,2,13,12,6,7,4,5,10,9,8};//rf,lf,lb,rb,rzA,rzB,lzA,lzB,STBY,rzPWM,lzPWM
+const int THRUSTERPIN[11] = {3,5,6,10,4,8,9,7,2,12,13};//rf,lf,lb,rb,A1,A2,lzA,lzB,STBY,rzPWM,lzPWM
 const int MTPLSMAX = 2000;
 const int MTPLSMIN = 1000;
 const int MTPLSSTOP = 1500;
@@ -46,3 +45,6 @@ const int SVPLSMIN = 1050;//open hand
 const int HANDSPEED = 50;
 
 int currenthand;
+
+int yabai1 = 1;
+int yabai2 = 1;

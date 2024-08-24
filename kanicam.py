@@ -36,9 +36,14 @@ class webcamcapture:
         cv2.destroyAllWindows()
 
     def save_img(self, frame):
+        # Convert BGR to RGB
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         photo_filename = os.path.join(self.save_dir, f'photo_{timestamp}.jpg')
-        cv2.imwrite(photo_filename, frame)
+
+        # Save the image in RGB format
+        cv2.imwrite(photo_filename, rgb_frame)
         print(f"save img: {photo_filename}")
 
     def clear_img(self):
